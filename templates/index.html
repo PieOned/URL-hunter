@@ -1,0 +1,63 @@
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <title>URL Hunter 1.0</title>
+    <script type="text/javascript">
+    function get(){
+    $.get("isrunning", function(data){
+    if(data == "true"){
+    $("#count").load("count");
+    $('#log').load("list.txt");
+    }else{
+    $("#sbm").attr("disabled", null);
+    $("#stop").attr("disabled", "true");
+    $("#count").load("count");
+    $('#log').load("list.txt");
+    }
+    });
+    }
+
+    function stop(){
+    $("#log").load("stop");
+    $("#sbm").attr("disabled", null);
+    $("#stop").attr("disabled", "true");
+    }
+
+    function start(kw){
+    if(kw != null){
+    $("#log").load("run?kw=" + kw);
+    setInterval(get, 5000);
+    $("#sbm").attr("disabled", "true");
+    $("#stop").attr("disabled",null);
+    }}
+
+    $(function(){
+    $.get("isrunning", function(data){
+    if(data == "false"){
+    $("#sbm").attr("onclick", "start( $('#kw').val() )");
+    $("#stop").attr("disabled","");
+    $("#sbm").attr("disabled",null);
+    get();
+    }else{
+    setInterval(get, 5000);
+    $("#sbm").attr("disabled", "true");
+    $("#stop").attr("disabled", null);
+    }
+    });
+    });
+    </script>
+  </head>
+  <body>
+     <div id="head">
+     <table border="0">
+     <tbody>
+     <tr><span style="color:green;font-size: 18;font-family: Arial">Enter search keywords or url: </span><input type="text" id="kw" size="100" style="border: 2px solid green;padding: 10px"> <button id="sbm" style="border: 2px solid green;margin-left: 15px;padding: 10px">Start</button><button id="stop" style="border: 2px solid green;margin-left: 15px;padding: 10px"  onclick="stop()">Stop</button></tr>
+     <p>Parsed <span id="count" style="color:green">0</span> URLs <a id="download" href="list.txt?astype=plain" target="_blank">Download</a></p>
+     </tbody>
+     </table
+     </div>
+     <hr>
+     <div id="log">
+     </div>
+  </body>
+</html>
